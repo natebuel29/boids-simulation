@@ -1,9 +1,7 @@
 class Boid{
     constructor(x,y,dx,dy){ 
-        console.log("here2");
         this.x = x;
         this.y = y;
-        console.log("here3");
         this.dx = dx;
         this.dy = dy;
         this.speed = 3;
@@ -11,8 +9,8 @@ class Boid{
 
     move(){
         let velocity = this.normalizeVelocity();
-        this.x = this.x + velocity[0];
-        this.y = this.y + velocity[1];
+        this.x = this.x + velocity[0]*this.speed;
+        this.y = this.y + velocity[1]*this.speed;
         
     }
 

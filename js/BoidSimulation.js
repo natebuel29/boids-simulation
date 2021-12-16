@@ -1,7 +1,7 @@
 
 let canvas = document.getElementById('gameCanvas');
 let canvasContext = canvas.getContext('2d');
-let boidCount = 1;
+let boidCount = 40;
 let boids = [];
 let height = 400;
 let width = 400;
@@ -19,7 +19,6 @@ function getRandomArbitrary(min, max) {
 
 function InitBoids(){
     for(let i=0; i<boidCount;i++){
-        console.log("here");
         let randX = getRandomInt(min,width);
         let randY = getRandomInt(min,width);
         let randDx = getRandomArbitrary(-3,3.1);
@@ -30,41 +29,54 @@ function InitBoids(){
 }
 
 function drawBoid(boid){
-    console.log("yo")
     canvasContext.save();
-    let prevX = boid.x;
-    let prevY = boid.y;
-    boid.move();
-    let newX = boid.x;
-    let newY = boid.y;
-    let angle = Math.atan2(newY-prevY,newX-prevX);
-    canvasContext.translate(newX, newY);
+    let angle = Math.atan2(boid.dy,boid.dx);
+    canvasContext.translate(boid.x, boid.y);
     canvasContext.rotate(angle);
-    canvasContext.translate(-newX,-newY);
+    canvasContext.translate(-boid.x,-boid.y);
     canvasContext.beginPath();
-    canvasContext.moveTo(newX, newY);
-    canvasContext.lineTo(newX-boidLength, newY-boidWidth);
-    canvasContext.lineTo(newX-boidLength, newY+boidWidth);
+    canvasContext.moveTo(boid.x, boid.y);
+    canvasContext.lineTo(boid.x-boidLength, boid.y-boidWidth);
+    canvasContext.lineTo(boid.x-boidLength, boid.y+boidWidth);
     canvasContext.fill();
     canvasContext.restore();
 }
 
-function DrawAllBoids(){
+
+
+function drawAllBoids(){
     canvasContext.clearRect(0, 0, canvas.width, canvas.height) 
     for(let i=0; i<boids.length;i++){
-        console.log("here");
         let tempBoid = boids[i];
+        bounds(tempBoid)
         drawBoid(tempBoid);
+        moveBoidToNewPosition(tempBoid)
     }
     
-    window.requestAnimationFrame(DrawAllBoids);
+    window.requestAnimationFrame(drawAllBoids);
+}
+
+function bounds(boid){
+    if(boid.x > width+boidLength-1){
+        boid.x = -boidLength;
+    }
+    else if(boid.x < -boidLength){
+        boid.x = width+boidLength;
+    }
+    else if (boid.y > height+boidLength){
+        boid.y = -boidLength;
+    }else if (boid.y < -boidLength){
+        boid.y = height+15;
+    }
+}
+
+function moveBoidToNewPosition(boid){
+    boid.move();
 }
 
 window.onload = function(){
     InitBoids();
-
-    console.log("here");
     
-    window.requestAnimationFrame(DrawAllBoids);
+    window.requestAnimationFrame(drawAllBoids);
 
 }
