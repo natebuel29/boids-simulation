@@ -8,14 +8,28 @@ class Boid{
     }
 
     move(){
-        let velocity = this.normalizeVelocity();
-        this.x = this.x + velocity[0]*this.speed;
-        this.y = this.y + velocity[1]*this.speed;
-        
+        // let velocity = this.normalizeVelocity();
+        // //this.x = this.x + velocity[0]*this.speed;
+        // this.y = this.y + velocity[1]*this.speed;
+        this.limitSpeed();
+        this.x +=this.dx;
+        this.y += this.dy;
     }
 
-    normalizeVelocity(){
-        let length = Math.sqrt(this.dx*this.dx +this.dy*this.dy);
-        return [this.dx/length,this.dy/length];
+    limitSpeed(){
+        let vlim = 12;
+        let velocityLength = Math.sqrt(this.dx*this.dx +this.dy*this.dy);
+
+        if(velocityLength > vlim){
+            this.dx = (this.dx/velocityLength)* vlim
+            this.dy = (this.dy/velocityLength)* vlim
+        }
     }
+
+    // //todo remove normalizeVelocity and add maxSpeed function
+
+    // normalizeVelocity(){
+    //     let length = Math.sqrt(this.dx*this.dx +this.dy*this.dy);
+    //     return [this.dx/length,this.dy/length];
+    // }
 }
