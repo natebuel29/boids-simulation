@@ -1,7 +1,7 @@
 
 let canvas = document.getElementById('gameCanvas');
 let canvasContext = canvas.getContext('2d');
-let boidCount = 50;
+let boidCount = 200;
 let boids = [];
 let height = 800;
 let width = 800;
@@ -80,9 +80,9 @@ function avoidBoids(boid) {
             let a = tempBoid.x - boid.x;
             let b = tempBoid.y - boid.y;
             let c = Math.sqrt(a * a + b * b);
-            if (c < 10) {
-                avoidDx += boid.x - tempBoid.x;
-                avoidDy += boid.y - tempBoid.y
+            if (c < 25) {
+                avoidDx += (boid.x - tempBoid.x)/c;
+                avoidDy += (boid.y - tempBoid.y)/c
             }
         }
     }
@@ -127,8 +127,8 @@ function flyTowardsCenter(boid) {
     centerDx = centerDx / (boidCount - 1);
     centerDy = centerDy / (boidCount - 1);
 
-    boid.dx += (centerDx - boid.x) * .01;
-    boid.dy += (centerDy - boid.y) * .01;
+    boid.dx += (centerDx - boid.x) * .005;
+    boid.dy += (centerDy - boid.y) * .005;
 }
 
 function moveBoidToNewPosition(boid) {
