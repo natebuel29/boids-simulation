@@ -1,16 +1,13 @@
 
 let canvas = document.getElementById('gameCanvas');
 let canvasContext = canvas.getContext('2d');
-let boidCount = 20;
+let boidCount = 200;
 let boids = [];
 let height = 800;
 let width = 800;
 let min = 0;
 let boidLength = 15;
 let boidWidth = 5;
-
-//TODO: add vision circle/box
-
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
@@ -79,15 +76,13 @@ function avoidBoids(boid) {
 
     for (let i = 0; i < boids.length; i++) {
         let tempBoid = boids[i];
-
         if (boid !== tempBoid) {
             let a = tempBoid.x - boid.x;
             let b = tempBoid.y - boid.y;
             let c = Math.sqrt(a * a + b * b);
-            console.log(c);
-            if (c < 20) {
-                avoidDx += boid.x - tempBoid.x;
-                avoidDy += boid.y - tempBoid.y
+            if (c < 25) {
+                avoidDx += (boid.x - tempBoid.x)/c;
+                avoidDy += (boid.y - tempBoid.y)/c
             }
         }
     }
@@ -112,8 +107,8 @@ function matchVelocity(boid) {
     matchDx = matchDx / (boidCount - 1);
     matchDy = matchDy / (boidCount - 1);
 
-    boid.dx += matchDx * 0.1;
-    boid.dy += matchDy * 0.1;
+    boid.dx += matchDx * 0.15;
+    boid.dy += matchDy * 0.15;
 }
 
 function flyTowardsCenter(boid) {
@@ -132,8 +127,8 @@ function flyTowardsCenter(boid) {
     centerDx = centerDx / (boidCount - 1);
     centerDy = centerDy / (boidCount - 1);
 
-    boid.dx += (centerDx - boid.x) * 0.05;
-    boid.dy += (centerDy - boid.y) * 0.05;
+    boid.dx += (centerDx - boid.x) * .005;
+    boid.dy += (centerDy - boid.y) * .005;
 }
 
 function moveBoidToNewPosition(boid) {
@@ -143,9 +138,17 @@ function moveBoidToNewPosition(boid) {
     boid.move();
 }
 
+function resizeCanvasWindow(){
+    height = window.innerHeight-100;
+    width = window.innerWidth-100;
+    canvas.height = window.innerHeight-100;
+    canvas.width = window.innerWidth-100;
+}
+
 window.onload = function () {
     InitBoids();
-
+    resizeCanvasWindow();
+    window.addEventListener('resize', resizeCanvasWindow);
     window.requestAnimationFrame(drawAllBoids);
 
 }
